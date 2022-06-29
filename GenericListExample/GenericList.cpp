@@ -1,0 +1,246 @@
+
+#include "GenericList.hpp"
+
+template<class data_t>
+GenericList<data_t>::GenericList()
+{
+	counter = 0;
+}
+
+template<class data_t>
+GenericList<data_t>::~GenericList()
+{
+	while(counter>0) remove(counter-1);
+}
+
+template<class data_t>
+void GenericList<data_t>::removeAt(Node* pointer, Node* previous)
+{
+	if (previous==NULL) root = root->next;
+	else previous->next = pointer->next;
+	delete pointer;
+	if (counter>0) counter--;
+}
+
+template<class data_t>  	
+bool GenericList<data_t>::add(data_t newValue)
+{
+	if (counter==0)
+	{
+		root = new Node;
+		root->next = NULL;
+		root->value = newValue;
+		counter++;
+        return true;
+	}
+	else if (counter < MaxLength)
+	{
+		Node *p = root;
+		while (p->next!=NULL) p = p->next;
+		p->next = new Node;
+		p->next->value = newValue;
+		p->next->next = NULL; 
+		counter++;
+        return true;
+	}
+	else return false;
+}
+
+template<class data_t>
+bool GenericList<data_t>::addRange(data_t* ptr, uint16_t length)
+{
+    bool result = true;
+	for (uint8_t i=0; i<length; i++)
+    {
+        result &= add(ptr[i]);
+    } 
+    return result;
+}
+
+template<class data_t>
+bool GenericList<data_t>::addRange(const data_t* ptr, uint16_t length)
+{
+    bool result = true;
+	for (uint8_t i=0; i<length; i++)
+    {
+        result &= add(ptr[i]);
+    } 
+    return result;
+}
+
+template<class data_t>
+bool GenericList<data_t>::insertAt(uint16_t index, data_t newValue)
+{
+	if (index >= counter)
+	{
+		return add(newValue);
+	}
+	else if (counter < MaxLength)
+	{
+		uint8_t indexer = 0;
+		Node *p = root;
+		Node *previous = NULL;
+		while (p->next!=NULL)
+		{
+			if (indexer == index)
+			{
+				if (previous == NULL)
+				{
+					root = new Node();
+					root->value = newValue;
+					root->next = p;
+				}
+				else
+				{
+					previous->next = new Node();
+					previous->next->value = newValue;
+					previous->next->next = p;
+				}
+				counter++;
+				return true;
+			}
+			indexer++;
+			previous = p;
+			p = p->next;
+		}
+	}
+	return false;
+}
+
+template<class data_t>
+bool GenericList<data_t>::changeValue(uint16_t index, data_t newValue)
+{
+	if (counter>0 && index < counter)
+	{
+		uint8_t indexer = 0;
+		Node *p = root;
+		while (p->next!=NULL)
+		{
+			if (indexer == index)
+			{
+				p->value = newValue;
+				return true;
+			}
+			indexer++;
+			p = p->next;
+		}
+		p->value = newValue;
+		return true;
+	}
+	else return false;
+}
+
+template<class data_t>	
+data_t GenericList<data_t>::get(uint16_t index)
+{
+	if (counter>0)
+	{
+		int indexer = 0;
+		Node *p = root;
+		while (p->next!=NULL)
+		{
+			if (indexer == index) return p->value;
+			indexer++;
+			p = p->next;
+		}
+		return p->value;
+	}
+	else return 0;
+}
+
+template<class data_t>
+data_t GenericList<data_t>::getLast()
+{
+	return get(counter-1);
+}
+
+template<class data_t>	
+bool GenericList<data_t>::remove(uint16_t index)
+{
+	if (index < counter)
+	{
+		uint16_t indexer = 0;
+		Node *p = root;
+		Node *pr = NULL;
+		while (p->next!=NULL)
+		{
+			if (indexer == index)
+			{
+				removeAt(p,pr);
+				return true;
+			} 
+			indexer++;
+			pr = p;
+			p = p->next;
+		}
+		removeAt(p,pr);		
+		return true;
+	}
+	else return false;
+}
+
+template<class data_t>
+void GenericList<data_t>::removeLast()
+{
+	remove(counter-1);
+}
+
+template<class data_t>	
+void GenericList<data_t>::clear()
+{
+	while(counter>0) remove(0);
+}
+
+template<class data_t>	
+void GenericList<data_t>::reverse()
+{
+	data_t* array = toArray();
+	uint16_t len = counter;
+	for (uint16_t i=0; i<len/2; i++)
+	{
+		data_t tmp = array[len-i-1];
+		array[len-i-1] = array[i];
+		array[i] = tmp;
+	}
+	clear();
+	addRange(array, len);
+}
+
+template<class data_t>	
+void GenericList<data_t>::toArray(data_t* array, uint16_t length)
+{
+	uint16_t i=0;
+	while (i<counter && i<length) 
+	{
+		array[i] = get(i);
+		i++;
+	} 
+	while (i<length)
+	{
+		array[i] = 0;
+		i++;
+	}
+}
+
+template<class data_t>		
+data_t* GenericList<data_t>::toArray()
+{
+	data_t* array = new data_t[counter];
+	for (uint8_t i=0; i < counter; i++) 
+    {
+		array[i] = get(i);
+	} 
+	return array;
+}
+
+template<class data_t>		
+data_t* GenericList<data_t>::toArray(data_t endValue)
+{
+	data_t* array = new data_t[counter+1];
+	for (uint8_t i=0; i < counter; i++) 
+    {
+		array[i] = get(i);
+	} 
+	array[counter] = endValue;
+	return array;
+}
