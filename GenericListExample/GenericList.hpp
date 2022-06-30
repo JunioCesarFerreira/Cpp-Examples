@@ -27,6 +27,9 @@ class GenericList
 		// Remove elemento da lista mantendo estrutura vinculada da lista.
 		void removeAt(Node* pointer, Node* previous);
 		
+		void swap(uint16_t i, uint16_t j);
+		void quickRecursively(uint16_t left, uint16_t right); 
+		
 	public:
 		// Construtor lista.
 		GenericList<data_t>();
@@ -70,6 +73,8 @@ class GenericList
 		// Inverte ordem da lista.
 		void reverse();
 		
+		void sort();
+		
 		// Transfere valores da lista para array conforme indicado.
 		void toArray(data_t* array, uint16_t length);
 		
@@ -92,4 +97,5 @@ template class GenericList<double>;
 
 
 #endif
+
 

@@ -1,4 +1,3 @@
-
 #include "GenericList.hpp"
 
 template<class data_t>
@@ -31,7 +30,7 @@ bool GenericList<data_t>::add(data_t newValue)
 		root->next = NULL;
 		root->value = newValue;
 		counter++;
-        return true;
+		return true;
 	}
 	else if (counter < MaxLength)
 	{
@@ -41,7 +40,7 @@ bool GenericList<data_t>::add(data_t newValue)
 		p->next->value = newValue;
 		p->next->next = NULL; 
 		counter++;
-        return true;
+		return true;
 	}
 	else return false;
 }
@@ -49,23 +48,23 @@ bool GenericList<data_t>::add(data_t newValue)
 template<class data_t>
 bool GenericList<data_t>::addRange(data_t* ptr, uint16_t length)
 {
-    bool result = true;
-	for (uint8_t i=0; i<length; i++)
-    {
-        result &= add(ptr[i]);
-    } 
-    return result;
+	bool result = true;
+	for (uint16_t i=0; i<length; i++)
+	{
+		result &= add(ptr[i]);
+	} 
+	return result;
 }
 
 template<class data_t>
 bool GenericList<data_t>::addRange(const data_t* ptr, uint16_t length)
 {
-    bool result = true;
-	for (uint8_t i=0; i<length; i++)
-    {
-        result &= add(ptr[i]);
-    } 
-    return result;
+	bool result = true;
+	for (uint16_t i=0; i<length; i++)
+	{
+		result &= add(ptr[i]);
+	} 
+	return result;
 }
 
 template<class data_t>
@@ -77,7 +76,7 @@ bool GenericList<data_t>::insertAt(uint16_t index, data_t newValue)
 	}
 	else if (counter < MaxLength)
 	{
-		uint8_t indexer = 0;
+		uint16_t indexer = 0;
 		Node *p = root;
 		Node *previous = NULL;
 		while (p->next!=NULL)
@@ -112,7 +111,7 @@ bool GenericList<data_t>::changeValue(uint16_t index, data_t newValue)
 {
 	if (counter>0 && index < counter)
 	{
-		uint8_t indexer = 0;
+		uint16_t indexer = 0;
 		Node *p = root;
 		while (p->next!=NULL)
 		{
@@ -226,8 +225,8 @@ template<class data_t>
 data_t* GenericList<data_t>::toArray()
 {
 	data_t* array = new data_t[counter];
-	for (uint8_t i=0; i < counter; i++) 
-    {
+	for (uint16_t i=0; i < counter; i++) 
+	{
 		array[i] = get(i);
 	} 
 	return array;
@@ -237,10 +236,50 @@ template<class data_t>
 data_t* GenericList<data_t>::toArray(data_t endValue)
 {
 	data_t* array = new data_t[counter+1];
-	for (uint8_t i=0; i < counter; i++) 
-    {
+	for (uint16_t i=0; i < counter; i++) 
+	{
 		array[i] = get(i);
 	} 
 	array[counter] = endValue;
 	return array;
+}
+
+template<class data_t>	
+void GenericList<data_t>::sort()
+{
+	if (counter>0)
+	{
+		quickRecursively(0, (uint16_t)counter-1);
+	}
+}
+
+template<class data_t>	
+void GenericList<data_t>::swap(uint16_t i, uint16_t j) 
+{
+	data_t tmp = get(i);
+	changeValue(i, get(j));
+	changeValue(j, tmp);
+}
+
+template<class data_t>	
+void GenericList<data_t>::quickRecursively(uint16_t low, uint16_t high)
+{
+	if (high>counter) high=0;
+	if (low < high) 
+	{ 
+		data_t pivot = get(high);
+		uint16_t i = low - 1;   
+		for (uint16_t j = low; j <= high-1; j++) 
+		{ 
+			if (get(j) <= pivot) 
+			{ 
+				i++;    
+				swap(i, j); 
+			} 
+		} 
+		i++;
+		swap(i, high); 
+		quickRecursively(low, i - 1); 
+		quickRecursively(i + 1, high); 
+	} 
 }
