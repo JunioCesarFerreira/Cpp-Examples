@@ -49,10 +49,18 @@ main()
 	chrListTest.addRange("61C08B5", 7);
 		
 	printf("%s\n", chrListTest.toArray(0));
+		
+	printf("operator overload chrListTest[%d]=%c\r\n", 7, chrListTest[7]);
 	
 	chrListTest.sort();
 	
 	printf("%s\n", chrListTest.toArray(0));
+	
+	printf("operator overload chrListTest[%d]=%c\r\n", 7, chrListTest[7]);
+	chrListTest[7] = 'G';
+	
+	printf("%s\n", chrListTest.toArray(0));
+	
 	
 	getch();
 }

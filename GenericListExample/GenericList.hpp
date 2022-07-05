@@ -42,6 +42,8 @@ class GenericList
 			return counter; 
 		}
 		
+		data_t& operator [] (uint16_t index);
+		
 		// Adiciona novo elemento na lista.
 		bool add(data_t newValue);
 		

@@ -283,3 +283,26 @@ void GenericList<data_t>::quickRecursively(uint16_t low, uint16_t high)
 		quickRecursively(i + 1, high); 
 	} 
 }
+
+template<class data_t>
+data_t& GenericList<data_t>::operator[](uint16_t index)
+{
+	if (counter>0)
+	{
+		int indexer = 0;
+		Node *p = root;
+		while (p->next!=NULL)
+		{
+			if (indexer == index) return p->value;
+			indexer++;
+			p = p->next;
+		}
+		return p->value;
+	}
+	else
+	{
+		static data_t dummy_writable_data = 0;
+		return dummy_writable_data;
+	}
+}
+
