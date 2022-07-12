@@ -62,7 +62,7 @@ main()
 	printf("%s\n", chrListTest.toArray(0));
 	
 	int setA[11] = { 5, 23, 1, 21, 14, 7, 16, 3, 53, 25, 2 };
-	int setB[13] = { 7, 98, 3, 14, 4, 5, 88, 9, 29, 1, 17, 23, 0 };
+	int setB[13] = { 42, 98, 3, 14, 4, 44, 88, 9, 29, 1, 17, 23, 53 };
 	
 	GenericList<int> A;
 	GenericList<int> B;

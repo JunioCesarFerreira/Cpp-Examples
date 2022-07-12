@@ -338,19 +338,16 @@ GenericList<data_t> GenericList<data_t>::intersection(GenericList<data_t> A, Gen
 		if (iteratorA->value < iteratorB->value)
 		{
 			iteratorA = iteratorA->next;
-			if (iteratorA == NULL) break;
 		}
 		else if (iteratorB->value < iteratorA->value)
 		{
 			iteratorB = iteratorB->next;	
-			if (iteratorB == NULL) break;		
 		}
 		else
 		{
 			result.add(iteratorA->value);
 			iteratorA = iteratorA->next;
-			iteratorB = iteratorB->next;
-			if (iteratorA == NULL || iteratorB == NULL) break;		
+			iteratorB = iteratorB->next;	
 		}
 	}
 	return result;
