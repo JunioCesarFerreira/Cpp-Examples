@@ -249,6 +249,7 @@ void GenericList<data_t>::sort()
 {
 	if (counter>0)
 	{
+		// Complexity O(n*log(n))
 		quickRecursively(0, (uint16_t)counter-1);
 	}
 }
@@ -289,7 +290,7 @@ data_t& GenericList<data_t>::operator[](uint16_t index)
 {
 	if (counter>0)
 	{
-		int indexer = 0;
+		uint16_t indexer = 0;
 		Node *p = root;
 		while (p->next!=NULL)
 		{
@@ -304,5 +305,54 @@ data_t& GenericList<data_t>::operator[](uint16_t index)
 		static data_t dummy_writable_data = 0;
 		return dummy_writable_data;
 	}
+}
+
+template<class data_t>
+GenericList<data_t> GenericList<data_t>::clone()
+{
+	GenericList<data_t> tmp;
+	Node* iterator = root;
+	while (iterator != NULL)
+	{
+		tmp.add(iterator->value);
+		iterator = iterator->next;
+	}	
+	return tmp;
+}
+
+template<class data_t>
+GenericList<data_t> GenericList<data_t>::intersection(GenericList<data_t> A, GenericList<data_t> B)
+{
+	// Se não estiver enganado as complexidades são:
+	// Complexity time O(n*log(n)+m*log(m)+2*n+2*m) pois cada sort O(N*log N) mais duas varreduras de cada lista. 
+	// Complexity space O(n+m) devido ao uso de listas temporárias.
+	GenericList<data_t> result;
+	GenericList<data_t> tmpA = A.clone();
+	GenericList<data_t> tmpB = B.clone();
+	tmpA.sort();
+	tmpB.sort();
+	Node* iteratorA = tmpA.root;
+	Node* iteratorB = tmpB.root;
+	while (iteratorA != NULL && iteratorB != NULL)
+	{
+		if (iteratorA->value < iteratorB->value)
+		{
+			iteratorA = iteratorA->next;
+			if (iteratorA == NULL) break;
+		}
+		else if (iteratorB->value < iteratorA->value)
+		{
+			iteratorB = iteratorB->next;	
+			if (iteratorB == NULL) break;		
+		}
+		else
+		{
+			result.add(iteratorA->value);
+			iteratorA = iteratorA->next;
+			iteratorB = iteratorB->next;
+			if (iteratorA == NULL || iteratorB == NULL) break;		
+		}
+	}
+	return result;
 }
 

@@ -75,7 +75,11 @@ class GenericList
 		// Inverte ordem da lista.
 		void reverse();
 		
+		// Ordena lista
 		void sort();
+				
+		// Clona a lista gerando uma nova instância.
+		GenericList<data_t> clone();
 		
 		// Transfere valores da lista para array conforme indicado.
 		void toArray(data_t* array, uint16_t length);
@@ -85,6 +89,9 @@ class GenericList
 		
 		// Retorna uma nova instância array da lista com um item finalizador indicado.
 		data_t* toArray(data_t endValue);
+		
+		// Realiza interseção entre listas.
+		static GenericList<data_t> intersection(GenericList<data_t> A, GenericList<data_t> B);
 };
 // Tipos permitidos.
 template class GenericList<char>;
