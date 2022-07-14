@@ -87,24 +87,24 @@ void quickRecursively(int *ptr, int low, int high)
 {
 	if (low < high) 
 	{ 
-    	printf("pivot=%d\r\n", ptr[high]);
-    	int i = low - 1;   
-    	for (int j = low; j <= high- 1; j++) 
+		printf("pivot=%d\r\n", ptr[high]);
+		int i = low - 1;   
+		for (int j = low; j <= high- 1; j++) 
 		{ 
-        	if (ptr[j] <= ptr[high]) 
+			if (ptr[j] <= ptr[high]) 
 			{ 
-            	i++;    
-            	swap(&ptr[i], &ptr[j]); 
-        	} 
-    	} 
+				i++;    
+				swap(&ptr[i], &ptr[j]); 
+			} 
+		} 
 		i++;
-    	swap(&ptr[i], &ptr[high]); 
-    	
+		swap(&ptr[i], &ptr[high]); 
+		
 		printArray(ptr, 16);
-    	
-        quickRecursively(ptr, low, i - 1); 
-        quickRecursively(ptr, i + 1, high); 
-    } 
+		
+		quickRecursively(ptr, low, i - 1); 
+		quickRecursively(ptr, i + 1, high); 
+	} 
 }
  
 //---------------------------------------------------------------------------------------------
@@ -116,80 +116,80 @@ void MergeSort(int *ptr, int length)
 void mergeRecursively(int *ptr, int start, int end) 
 {	
 	if (start == end) return;	
-    
-    int half = (start + end)/ 2;
-    
-    mergeRecursively(ptr, start, half);
-    mergeRecursively(ptr, half + 1, end);
+	
+	int half = (start + end)/ 2;
+	
+	mergeRecursively(ptr, start, half);
+	mergeRecursively(ptr, half + 1, end);
 
-    int length = end - start + 1;
-    int *ptrTmp = (int *) malloc(sizeof(int) * length);
-    
+	int length = end - start + 1;
+	int *ptrTmp = (int *) malloc(sizeof(int) * length);
+	
 	int i = start;
 	int j = half + 1;
 	int k = 0;
-    while(i <= half || j  <= end) 
+	while(i <= half || j  <= end) 
 	{
-        if (i > half) 
+		if (i > half) 
 		{ 
-            ptrTmp[k] = ptr[j];
-            j++;
-        }else if (j > end) 
+			ptrTmp[k] = ptr[j];
+			j++;
+		}else if (j > end) 
 		{
-            ptrTmp[k] = ptr[i];
-            i++;
-        }else if (ptr[i] <= ptr[j]) 
+			ptrTmp[k] = ptr[i];
+			i++;
+		}else if (ptr[i] <= ptr[j]) 
 		{
-            ptrTmp[k] = ptr[i];
-            i++;
-        }else 
+			ptrTmp[k] = ptr[i];
+			i++;
+		}else 
 		{
-            ptrTmp[k] = ptr[j];
-            j++;
-        }
-        k++;
-    }
+			ptrTmp[k] = ptr[j];
+			j++;
+		}
+		k++;
+	}
 	printArray(ptrTmp, length);
-    
-    for(int i = 0; i < length; i++) 
+	
+	for(int i = 0; i < length; i++) 
 	{
-        ptr[i+start]=ptrTmp[i];
-    }
-    free(ptrTmp);
+		ptr[i+start]=ptrTmp[i];
+	}
+	free(ptrTmp);
 	printArray(ptr, 16);
 }
 
 //---------------------------------------------------------------------------------------------
 void heapify(int *ptr, int n, int i) 
 {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-  
-    if (left < n && ptr[left] > ptr[largest]) largest = left;
-  
-    if (right < n && ptr[right] > ptr[largest]) largest = right;
-  
-    if (largest != i) 
+	int largest = i;
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
+	
+	if (left < n && ptr[left] > ptr[largest]) largest = left;
+	
+	if (right < n && ptr[right] > ptr[largest]) largest = right;
+	
+	if (largest != i) 
 	{
-      swap(&ptr[i], &ptr[largest]);
-      printArray(ptr, 16);
-      heapify(ptr, n, largest);
-    }
+		swap(&ptr[i], &ptr[largest]);
+		printArray(ptr, 16);
+		heapify(ptr, n, largest);
+	}
 }
-  
+
 void HeapSort(int *ptr, int n) 
 {
-    for (int i = n / 2 - 1; i >= 0; i--)
+	for (int i = n / 2 - 1; i >= 0; i--)
 	{
-      heapify(ptr, n, i);
+		heapify(ptr, n, i);
 	}
-  
-    for (int i = n - 1; i >= 0; i--) 
+	
+	for (int i = n - 1; i >= 0; i--) 
 	{
-      swap(&ptr[0], &ptr[i]);
-      heapify(ptr, i, 0);
-    }
+		swap(&ptr[0], &ptr[i]);
+		heapify(ptr, i, 0);
+	}
 }
 //---------------------------------------------------------------------------------------------
 
@@ -217,7 +217,7 @@ int main()
 	initArray(&array[0]);
 	printArray(&array[0], 16);	
 	QuickSort(array, 16);
-		
+	
 	printf("\nMerge Sort\r\nInput");
 	initArray(&array[0]);
 	printArray(&array[0], 16);	
