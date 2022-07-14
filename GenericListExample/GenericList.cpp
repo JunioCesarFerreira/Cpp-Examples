@@ -209,9 +209,11 @@ template<class data_t>
 void GenericList<data_t>::toArray(data_t* array, uint16_t length)
 {
 	uint16_t i=0;
-	while (i<counter && i<length) 
+	Node* iterator = root;
+	while (i<length && iterator!=NULL) 
 	{
-		array[i] = get(i);
+		array[i] = iterator->value;
+		iterator = iterator->next;
 		i++;
 	} 
 	while (i<length)
@@ -225,9 +227,11 @@ template<class data_t>
 data_t* GenericList<data_t>::toArray()
 {
 	data_t* array = new data_t[counter];
+	Node* iterator = root;
 	for (uint16_t i=0; i < counter; i++) 
 	{
-		array[i] = get(i);
+		array[i] = iterator->value;
+		iterator = iterator->next;
 	} 
 	return array;
 }
@@ -236,9 +240,11 @@ template<class data_t>
 data_t* GenericList<data_t>::toArray(data_t endValue)
 {
 	data_t* array = new data_t[counter+1];
+	Node* iterator = root;
 	for (uint16_t i=0; i < counter; i++) 
 	{
-		array[i] = get(i);
+		array[i] = iterator->value;
+		iterator = iterator->next;
 	} 
 	array[counter] = endValue;
 	return array;
