@@ -9,7 +9,12 @@ GenericList<data_t>::GenericList()
 template<class data_t>
 GenericList<data_t>::~GenericList()
 {
-	while(counter>0) remove(counter-1);
+	while(root!=NULL)
+	{
+		Node* tmp=root;
+		root=root->next;
+		delete tmp;
+	}
 }
 
 template<class data_t>
