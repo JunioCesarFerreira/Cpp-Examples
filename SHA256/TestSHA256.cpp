@@ -10,9 +10,10 @@ using std::endl;
 string conv_sha256(string input); 
  
 // Test
-int main()
+int main(int argc, char *argv[])
 {
     string input = "Texto a ser convertido.";
+    if (argv[1] != NULL) input = argv[1];
     
     string output = conv_sha256(input);
  
