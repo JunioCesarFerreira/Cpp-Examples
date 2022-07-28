@@ -19,9 +19,9 @@ int main(int argc, char **argv)
 	// 4 - Senha para uso na criptografia
 	if (argc != 5) 
 	{
-      printf("Parameters does not match.\r\n");
-      return 0;
-    }
+		printf("Parameters does not match.\r\n");
+		return 0;
+	}
 	
 	char *paths[2] = { argv[2], argv[3] };
 	
