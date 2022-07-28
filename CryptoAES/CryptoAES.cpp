@@ -3,6 +3,8 @@
 
 #include "Rijndael.h"
 
+//#define DEBUG_AES
+
 #define KEYBITS  256
 #define BlockSize 16
 
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
 	}
 }
 
-// Função encrypt AES
+// Encrypt AES
 int encrypt(char *password, char *paths[])
 {
 	unsigned long rk[RKLENGTH(KEYBITS)];
@@ -89,22 +91,22 @@ int encrypt(char *password, char *paths[])
 		}
 		CountSize+=16;
 		printf("  output %d\r", CountSize);
-		/*
-		// Apenas para visualização em debug
+		
+#ifdef DEBUG_AES
 		printf("plaintext:\r\n");
 		for (i=0;i<BlockSize;i++) printf("%x ",plaintext[i]);
 		printf("\r\n");
 		for (i=0;i<BlockSize;i++) printf("%c ",plaintext[i]);
 		printf("\r\n");
-		*/
+#endif
 		// Executa algoritmo rijndael
 		rijndaelEncrypt(rk, nrounds, plaintext, ciphertext);
-		/*
-		// Apenas para visualização em debug
+
+#ifdef DEBUG_AES
 		printf("ciphertext:\r\n");
 		for (i=0;i<BlockSize;i++) printf("%x ",ciphertext[i]);
 		printf("\r\n\n");
-		*/
+#endif
 		
 		if (fwrite(ciphertext, 1, sizeof(ciphertext), output)==EOF)
 		{
@@ -117,7 +119,7 @@ int encrypt(char *password, char *paths[])
 	return 1;
 }
 
-// Funçaõ decript AES
+// Decript AES
 int decrypt(char *password, char *paths[])
 {
 	unsigned long rk[RKLENGTH(KEYBITS)];
@@ -164,21 +166,23 @@ int decrypt(char *password, char *paths[])
 		CountSize+=16;
 		printf("  output %d\r", CountSize);
 		if (!Continue) break;
-		/*
-		// Apenas para visualização em debug
+		
+#ifdef DEBUG_AES
 		printf("ciphertext:\r\n");
 		for (i=0;i<BlockSize;i++) printf("%x ",ciphertext[i]);
 		printf("\r\n");
-		*/
+#endif
+
 		rijndaelDecrypt(rk, nrounds, ciphertext, plaintext);
-		/*
-		// Apenas para visualização em debug
+		
+#ifdef DEBUG_AES
 		printf("plaintext:\r\n");
 		for (i=0;i<BlockSize;i++) printf("%x ",plaintext[i]);
 		printf("\r\n");
 		for (i=0;i<BlockSize;i++) printf("%c ",plaintext[i]);
 		printf("\r\n\n");
-		*/
+#endif
+
 		fwrite(plaintext, 1, sizeof(plaintext), output);
 	}
 	fclose(output);
