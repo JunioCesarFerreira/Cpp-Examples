@@ -8,8 +8,15 @@
 #define KEYBITS  256
 #define BlockSize 16
 
-int encrypt(char *password, char *paths[]);
-int decrypt(char *password, char *paths[]);
+class AESClass
+{
+	private:
+		RijndaelClass rijndael;
+		
+	public:
+		int encrypt(char *password, char *paths[]);
+		int decrypt(char *password, char *paths[]);
+};
 
 int main(int argc, char **argv)
 {
@@ -26,14 +33,15 @@ int main(int argc, char **argv)
 	}
 	
 	char *paths[2] = { argv[2], argv[3] };
+	AESClass aes;
 	
 	if (!strcmp(argv[1],"encrypt"))
 	{
-		return encrypt(argv[4], paths);
+		return aes.encrypt(argv[4], paths);
 	}
 	else if(!strcmp(argv[1],"decrypt"))
 	{
-		return decrypt(argv[4], paths);
+		return aes.decrypt(argv[4], paths);
 	}
 	else
 	{
@@ -42,7 +50,7 @@ int main(int argc, char **argv)
 }
 
 // Encrypt AES
-int encrypt(char *password, char *paths[])
+int AESClass::encrypt(char *password, char *paths[])
 {
 	unsigned long rk[RKLENGTH(KEYBITS)];
 	unsigned char key[KEYLENGTH(KEYBITS)];
@@ -57,7 +65,7 @@ int encrypt(char *password, char *paths[])
 		key[i] = *password != 0 ? *password++ : 0;  
 	}
 	
-	nrounds = rijndaelSetupEncrypt(rk, key, 256);
+	nrounds = rijndael.setupEncrypt(rk, key, 256);
 	
 	input = fopen(paths[0], "rb");
 	if (input == NULL)
@@ -100,7 +108,7 @@ int encrypt(char *password, char *paths[])
 		printf("\r\n");
 #endif
 		// Executa algoritmo rijndael
-		rijndaelEncrypt(rk, nrounds, plaintext, ciphertext);
+		rijndael.encrypt(rk, nrounds, plaintext, ciphertext);
 
 #ifdef DEBUG_AES
 		printf("ciphertext:\r\n");
@@ -120,7 +128,7 @@ int encrypt(char *password, char *paths[])
 }
 
 // Decript AES
-int decrypt(char *password, char *paths[])
+int AESClass::decrypt(char *password, char *paths[])
 {
 	unsigned long rk[RKLENGTH(KEYBITS)];
 	unsigned char key[KEYLENGTH(KEYBITS)];
@@ -134,7 +142,7 @@ int decrypt(char *password, char *paths[])
 	{
 		key[i] = *password != 0 ? *password++ : 0;
 	}
-	nrounds = rijndaelSetupDecrypt(rk, key, 256);
+	nrounds = rijndael.setupDecrypt(rk, key, 256);
 
 	input = fopen(paths[0], "rb");
 	if (input == NULL)
@@ -173,7 +181,7 @@ int decrypt(char *password, char *paths[])
 		printf("\r\n");
 #endif
 
-		rijndaelDecrypt(rk, nrounds, ciphertext, plaintext);
+		rijndael.decrypt(rk, nrounds, ciphertext, plaintext);
 		
 #ifdef DEBUG_AES
 		printf("plaintext:\r\n");
