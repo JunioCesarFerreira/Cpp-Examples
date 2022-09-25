@@ -8,6 +8,7 @@
 #define KEYBITS  256
 #define BlockSize 16
 
+// Classe de criptografia AES
 class AESClass
 {
 	private:
@@ -18,6 +19,7 @@ class AESClass
 		int decrypt(char *password, char *paths[]);
 };
 
+//------------------------------------------------------------------
 int main(int argc, char **argv)
 {
 	// Argumentos
@@ -48,6 +50,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 }
+//------------------------------------------------------------------
 
 // Encrypt AES
 int AESClass::encrypt(char *password, char *paths[])

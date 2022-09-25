@@ -1,4 +1,3 @@
-
 /**
  * Expand the cipher key into the encryption key schedule.
  *
