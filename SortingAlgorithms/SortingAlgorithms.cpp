@@ -3,21 +3,41 @@
 #include<stdlib.h>
 
 //---------------------------------------------------------------------------------------------
-// Funções auxiliares
+// Test class
 //---------------------------------------------------------------------------------------------
-/// Print Array
-void printArray(int *ptr, int length) 
+class TestArray
 {
-	printf("Array=(%d", *ptr);
-	for(int i=1; i<length; i++) printf(", %d", *(ptr+i));
-	printf(")\r\n");
-}
-/// Initialize Array 
-void initArray(int *ptr) 
-{
-	int array[16] = {7,15,9,3,10,4,2,13,14,6,1,12,0,8,11,5};
-	for (int i=0; i<16; i++) *(ptr+i)=array[i];
-}
+	public:
+		const static int length = 20;
+		int array[length];
+		
+		void initArray() 
+		{
+			int initValues[length] = 
+			{
+				17,  7, 15,  9, 19,
+			 	 3, 20, 10,  4,  2,
+				13, 14, 18,  6,  1,
+				12,  0,  8, 11,  5
+			};
+			for (int i=0; i<length; i++) array[i]=initValues[i];
+		}
+		
+		void printArray() 
+		{
+			printf("Array=(%d", array[0]);
+			for(int i=1; i<length; i++) printf(", %d", array[i]);
+			printf(")\r\n");
+		}
+		
+		static void printArray(const char* text, int *ptr, int length) 
+		{
+			printf("%s=(%d", text, *ptr);
+			for(int i=1; i<length; i++) printf(", %d", *(ptr+i));
+			printf(")\r\n");
+		}	
+};
+
 /// swap elements
 void swap(int *pt1, int *pt2) 
 {
@@ -39,7 +59,7 @@ void BubbleSort(int *ptr, int length)
 			if (ptr[j] < ptr[i])
 			{
 				swap(ptr+i, ptr+j);
-				printArray(ptr, length);
+				TestArray::printArray("Array", ptr, length);
 			} 
 		}
 	}
@@ -57,7 +77,7 @@ void InsertionSort(int *ptr, int length)
 			j--;
 		}
 		ptr[j+1] = tmp;
-		printArray(ptr, length);
+		TestArray::printArray("Array", ptr, length);
 	}
 }
 /// Selection Sort
@@ -71,7 +91,7 @@ void SelectionSort(int *ptr, int length)
 			if (ptr[j] < ptr[min]) min = j;
 		}
 		swap(ptr+min, ptr+i);
-		printArray(ptr, length);
+		TestArray::printArray("Array", ptr, length);
 	}
 }
 
@@ -100,7 +120,7 @@ void quickRecursively(int *ptr, int low, int high)
 		i++;
 		swap(&ptr[i], &ptr[high]); 
 		
-		printArray(ptr, 16);
+		TestArray::printArray("Array", ptr, TestArray::length);
 		
 		quickRecursively(ptr, low, i - 1); 
 		quickRecursively(ptr, i + 1, high); 
@@ -134,29 +154,32 @@ void mergeRecursively(int *ptr, int start, int end)
 		{ 
 			ptrTmp[k] = ptr[j];
 			j++;
-		}else if (j > end) 
+		}
+		else if (j > end) 
 		{
 			ptrTmp[k] = ptr[i];
 			i++;
-		}else if (ptr[i] <= ptr[j]) 
+		}
+		else if (ptr[i] <= ptr[j]) 
 		{
 			ptrTmp[k] = ptr[i];
 			i++;
-		}else 
+		}
+		else 
 		{
 			ptrTmp[k] = ptr[j];
 			j++;
 		}
 		k++;
 	}
-	printArray(ptrTmp, length);
+	TestArray::printArray("Temp", ptrTmp, length);
 	
 	for(int i = 0; i < length; i++) 
 	{
 		ptr[i+start]=ptrTmp[i];
 	}
 	free(ptrTmp);
-	printArray(ptr, 16);
+	TestArray::printArray("Array", ptr, TestArray::length);
 }
 
 //---------------------------------------------------------------------------------------------
@@ -173,7 +196,7 @@ void heapify(int *ptr, int n, int i)
 	if (largest != i) 
 	{
 		swap(&ptr[i], &ptr[largest]);
-		printArray(ptr, 16);
+		TestArray::printArray("Array", ptr, TestArray::length);
 		heapify(ptr, n, largest);
 	}
 }
@@ -193,41 +216,43 @@ void HeapSort(int *ptr, int n)
 }
 //---------------------------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------------------------
 // Programa de teste
+//---------------------------------------------------------------------------------------------
 int main()
 {
-	int array[16] = {7,15,9,3,10,4,2,13,14,6,1,12,0,8,11,5};
+	TestArray test;
 	
-	printf("\nBubble Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	BubbleSort(&array[0], 16);
+	printf("\nBubble Sort\r\nInput ");
+	test.initArray();
+	test.printArray();	
+	BubbleSort(test.array, test.length);
 	
 	printf("\nSelection Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	SelectionSort(&array[0], 16);
+	test.initArray();
+	test.printArray();	
+	SelectionSort(test.array, test.length);
 	
 	printf("\nInsertion Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	InsertionSort(&array[0], 16);
+	test.initArray();
+	test.printArray();	
+	InsertionSort(test.array, test.length);
 	
 	printf("\nQuick Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	QuickSort(array, 16);
+	test.initArray();
+	test.printArray();	
+	QuickSort(test.array, test.length);
 	
 	printf("\nMerge Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	MergeSort(array, 16);
-	
-	
+	test.initArray();
+	test.printArray();	
+	MergeSort(test.array, test.length);
+		
 	printf("\nHeap Sort\r\nInput");
-	initArray(&array[0]);
-	printArray(&array[0], 16);	
-	HeapSort(array, 16);
+	test.initArray();
+	test.printArray();	
+	HeapSort(test.array, test.length);
+	test.printArray();
 	
 	getch();
 }
