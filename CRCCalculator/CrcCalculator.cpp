@@ -28,6 +28,43 @@ class CrcClass
 			return tmp;
 		}
 		
+		inline data_t calc_with_reflected_input(char* data, size_t length)
+		{
+			data_t crc = init_value;
+			for (uint8_t i=0; i<length; i++) 
+			{
+				uint8_t curr_byte = data[i]; // Variável auxiliar de verificação do bit mais significativo.
+				for (int j=0; j<8; j++) 
+				{
+					if ((curr_byte^crc) & msbMask != 0)
+					{
+						crc = (crc >> 1) ^ div_polynomial;
+					}
+					else crc >>= 1;		 
+					curr_byte >>= 1;
+				}
+			}
+			return crc;
+		}
+		
+		inline data_t calc_without_reflected_input(char* data, size_t length)
+		{
+			data_t crc = init_value;
+			for (uint8_t i=0; i<length; i++) 
+			{
+				crc ^= (data_t)data[i] << shift_bits;
+				for (int i = 0; i < 8; i++)
+				{
+					if ((crc & msbMask) != 0)
+					{			
+						crc = (crc << 1) ^ div_polynomial;
+					}
+					else crc <<= 1;
+				}
+			}
+			return crc;
+		}
+		
 	public:
 		// Construtor
 		CrcClass(data_t polynomial, data_t init, bool input_ref, bool result_ref)
@@ -59,43 +96,23 @@ class CrcClass
 		// Calcula CRC utilizando parâmetros do objeto.
 		data_t calc(char* data, size_t length)
 		{
-			data_t crc = init_value;
-			// loop nos dados.
-			for (uint8_t i=0; i<length; i++) 
+			data_t crc;
+			if (input_reflected) // Entrada refletida
 			{
-				if (input_reflected) // Entrada refletida
-				{
-					uint8_t curr_byte = data[i]; // Variável auxiliar de verificação do bit mais significativo.
-					for (int j=0; j<8; j++) 
-					{
-						if ((curr_byte^crc) & msbMask != 0)
-						{
-							crc = (crc >> 1) ^ div_polynomial;
-						}
-						else crc >>= 1;		 
-						curr_byte >>= 1;
-					}
-				}
-				else // Entrada não refletida
-				{
-					crc ^= (data_t)data[i] << shift_bits;
-					for (int i = 0; i < 8; i++)
-					{
-						if ((crc & msbMask) != 0)
-						{			
-							crc = (crc << 1) ^ div_polynomial;
-						}
-						else crc <<= 1;
-					}
-				}
+				crc = calc_with_reflected_input(data, length);
 			}
+			else // Entrada não refletida
+			{
+				crc = calc_without_reflected_input(data, length);
+			}
+			
 			/*
 			Tabela verdade de aplicação de reflexão no resultado:
 			input result reflect
-			  0	 0	  0
-			  0	 1	  1
-			  1	 0	  1
-			  1	 1	  0
+			  0	    0	   0
+			  0	    1	   1
+			  1	    0	   1
+			  1	    1	   0
 			*/
 			if (result_reflected ^ input_reflected) crc = reflect_bits(crc);
 			
