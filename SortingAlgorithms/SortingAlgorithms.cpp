@@ -54,14 +54,17 @@ void BubbleSort(int *ptr, int length)
 {
 	for (int i=0; i<length; i++) 
 	{
+		bool noswap = true;
 		for (int j=i; j<length; j++) 
 		{
 			if (ptr[j] < ptr[i])
 			{
+				noswap = false;
 				swap(ptr+i, ptr+j);
 				TestArray::printArray("Array", ptr, length);
 			} 
 		}
+		if (noswap) break;
 	}
 }
 /// Insertion Sort
@@ -183,32 +186,38 @@ void mergeRecursively(int *ptr, int start, int end)
 }
 
 //---------------------------------------------------------------------------------------------
-void heapify(int *ptr, int n, int i) 
+void heapify(int *ptr, int len, int i) 
 {
 	int largest = i;
 	int left = 2 * i + 1;
 	int right = 2 * i + 2;
 	
-	if (left < n && ptr[left] > ptr[largest]) largest = left;
+	if (left < len && ptr[left] > ptr[largest])
+	{
+		largest = left;
+	} 
 	
-	if (right < n && ptr[right] > ptr[largest]) largest = right;
+	if (right < len && ptr[right] > ptr[largest])
+	{
+		largest = right;
+	} 
 	
 	if (largest != i) 
 	{
 		swap(&ptr[i], &ptr[largest]);
 		TestArray::printArray("Array", ptr, TestArray::length);
-		heapify(ptr, n, largest);
+		heapify(ptr, len, largest);
 	}
 }
 
-void HeapSort(int *ptr, int n) 
+void HeapSort(int *ptr, int len) 
 {
-	for (int i = n / 2 - 1; i >= 0; i--)
+	for (int i = len / 2 - 1; i >= 0; i--)
 	{
-		heapify(ptr, n, i);
+		heapify(ptr, len, i);
 	}
 	
-	for (int i = n - 1; i >= 0; i--) 
+	for (int i = len - 1; i >= 0; i--) 
 	{
 		swap(&ptr[0], &ptr[i]);
 		heapify(ptr, i, 0);
