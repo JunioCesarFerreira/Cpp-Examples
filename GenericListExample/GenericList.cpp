@@ -334,9 +334,6 @@ GenericList<data_t> GenericList<data_t>::clone()
 template<class data_t>
 GenericList<data_t> GenericList<data_t>::intersection(GenericList<data_t> A, GenericList<data_t> B)
 {
-	// if I'm not mistaken:
-	// Complexity time O(n*log(n)+m*log(m)+n+m) pois cada sort O(N*log N) mais duas varreduras de cada lista. 
-	// Complexity space O(n+m) devido ao uso de tmp listas.
 	GenericList<data_t> result;
 	GenericList<data_t> tmpA = A.clone();
 	GenericList<data_t> tmpB = B.clone();
