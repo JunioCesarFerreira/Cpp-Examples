@@ -20,6 +20,8 @@ Repositório com exemplos didáticos em C++.
 
 - **[SortingAlgorithms](./SortingAlgorithms/SortingAlgorithms.cpp)**: Exemplos de implementações de alguns algoritmos clássicos de ordenação.
 
+- **[Queue, Stack, Graph, BFS, DFS](./BasicStructsStudy/)**: Exemplo de estruturas elementáres de Fila e Pilha com aplicação em buscas em grafos. Esta implementação é extremamente didática, não utiliza nenhuma biblioteca da linguagem C++.
+
 
 ## Licença
 
